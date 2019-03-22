@@ -1,0 +1,122 @@
+
+<html>
+<head>
+	<title>GIS技术与应用2019实习 zhangyangxi</title>
+</head>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<style>
+	body { margin:0; padding:0; }
+	.btn { float:left;z-index:1;width: 40;height: 50;}
+	.map { float:left;z-index:1;width: 800;height: 800;}
+</style>
+</style>
+<script type="text/javascript">
+// Syntax: <xmin>, <ymin>, <xmax>, <ymax>
+
+var xmin,ymin,xmax,ymax,bboxValue;
+xmin=70;//西
+ymin=5;//南
+xmax=135;//东
+ymax=55;//北
+zoomSize=5; 
+url="https://services.femadata.com/arcgis/rest/services/SampleWorldCities/MapServer/export?size=800,800&f=image&bbox=";   
+function btnEvent (btnObj)
+{
+	var btnValue=btnObj.getAttribute("name");
+	if(btnValue=='1')
+	{
+		xmin=xmin-zoomSize;
+		xmax=xmax-zoomSize;
+		setMap();
+	}	
+	if(btnValue=='2')
+	{
+		ymin=ymin+zoomSize;
+		ymax=ymax+zoomSize;
+		setMap();
+	}	
+	if(btnValue=='3')
+	{
+		xmin=xmin+zoomSize;
+		xmax=xmax+zoomSize;
+		setMap();
+	}	
+	if(btnValue=='4')
+	{	   
+		ymin=ymin-zoomSize;
+		ymax=ymax-zoomSize;
+		setMap();
+	}
+	if(btnValue=='5')
+	{	   
+		ymin=ymin+(ymin*0.05);
+		ymax=ymax-(ymax*0.05);
+		xmin=xmin+(xmin*0.05);
+		xmax=xmax-(xmax*0.05);
+		setMap();
+	}
+	if(btnValue=='6')
+	{	   
+	    ymin=ymin-(ymin*0.05);
+		ymax=ymax+(ymax*0.05);
+		xmin=xmin-(xmin*0.05);
+		xmax=xmax+(xmax*0.05);
+		setMap();
+	}			
+
+
+}
+
+function setMap()
+{
+	 bboxValue=xmin+","+ymin+","+xmax+","+ymax; 
+	$('#map1').css("background-image", "url("+url+bboxValue+")");   
+}
+
+
+
+
+
+ 
+
+</script>
+<body onload="setMap();">	
+	<div style="float: left;width: 100%">
+		<div class="btn" id="left" name="1" onclick="btnEvent(this)">向左</div>
+		<div class="btn" id="up"   name="2" onclick="btnEvent(this)">向上</div>
+		<div class="btn" id="right" name="3" onclick="btnEvent(this)">向右</div>
+		<div class="btn" id="down"  name="4" onclick="btnEvent(this)">向下</div>
+		<div class="btn" id="zoomIn"  name="5" onclick="btnEvent(this)">放大</div>
+		<div class="btn" id="zoomOut"  name="6" onclick="btnEvent(this)">缩小</div>
+	</div>
+	<div >
+
+		<div id="map1" class="map"   ></div>
+
+	</div>
+<script type="text/javascript">
+	var x,y;
+	$('#map1').mousedown(function(e) {
+
+		var positionDiv = $('#map1').offset();
+		var distenceX = e.clientX
+		var distenceY = e.clientY;
+		$('#map1').mousemove(function(e) {
+			  x = e.clientX - distenceX;
+			  y = e.clientY - distenceY;
+		});
+
+	});
+
+
+    $('#map1').mouseup(function(e){
+        y=y/800;
+        x=x/800;
+        ymin=ymin+y*180;
+		ymax=ymax+y*180;
+		xmin=xmin-x*360;
+		xmax=xmax-x*360; 
+		setMap();
+    });
+</script>
+</body>
